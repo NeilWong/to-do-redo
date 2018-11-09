@@ -31,6 +31,10 @@ class App extends Component {
     });
   }
 
+  /*
+  * Goes through the state todos list and recreates it but only copying over todos that don't have
+  * the passed in id (the todo we want to do will have that id and as a result wont be copied over)
+  */
   removeTodo = (id) => {
     this.setState({
         todos: this.state.todos.filter((todo, index) => todo.id !== id)
