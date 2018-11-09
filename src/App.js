@@ -17,6 +17,11 @@ class App extends Component {
     };
   }
 
+  /*
+  * Adds a new todo item to state.todos that has two parameters
+  * id - (so that the newly created object can later delete itself by passing in its id)
+  * todoText - (used to )
+  */
   addTodo = (todoText) => {
     let todos = this.state.todos.slice();
     todos.push({id: this.state.nextId, text: todoText});
@@ -38,6 +43,7 @@ class App extends Component {
         <div className="todo-wrapper">
           <TodoHeader />
           <TodoInput todoText="" addTodo={this.addTodo} />
+          {/*Equivalent to creating a const name element to return the mapped and instantiated objects within todos*/}
           <ul>
             {
               this.state.todos.map((todo) => {
