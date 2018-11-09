@@ -1,83 +1,55 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import './task-item';
-//Going to have a Delete and Rename Functionalities
+import TodoHeader from './TodoHeader';
+import TodoInput from './TodoInput';
+import TodoItem from './TodoItem';
+
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      todo_list : [{title: "ex. Item1 = Not Die", item_input: ''}, //item input will be used to delete or rename
-                   {title: "ex2. Item2 = Breath", item_input: ''}],
-      input: ''
-    }
+      todos: [
+        {id: 0, text: "Make dinner tonight!"},
+        {id: 1, text: "Fold the laundry."},
+        {id: 2, text: "Learn to make a React app!"}
+      ],
+      nextId: 3
+    };
+
+    this.addTodo = this.addTodo.bind(this);
+    this.removeTodo = this.removeTodo.bind(this);
   }
-handle_change = (event) =>{
-  this.setState(
-    {input:event.target.value})
-}
 
-handle_submit = (event) =>{
-  const new_item = {
-    title: this.state.input,
-    rename_input: ''
-  }
-  event.preventDefault()
-  this.setState({
-    todo_list : [...this.todo_list, new_item],
-    input:''
-  })
-
-}
-
-input_handle_change = (event,item) =>{
-    const {todo_list} = this.state
-
-    for (let i = 0; i< todo_list.length ; i++){
-      if (todo_list[i] === item){
-        todo_list[i].item_input = event.target.value
-      }
-    }
+  addTodo(todoText) {
+    let todos = this.state.todos.slice();
+    todos.push({id: this.state.nextId, text: todoText});
     this.setState({
-      todo_list
-    })
-
-}
-input_handle_submit = (event,item) =>{
-  const {todo_list} = this.state
-
-  for (let i = 0; i< todo_list.length ; i++){
-    if (todo_list[i] === item){
-      todo_list[i].title = todo_list[i].item_input
-      todo_list[i].item_input = ''
-    }
+      todos: todos,
+      nextId: ++this.state.nextId
+    });
   }
-  this.setState({
-    todo_list
-  })
-}
 
-
-remove_handle_submit = (event,item) =>{
-  event.preventDefault()
-  const {todo_list} = this.state
-
-  for (let i = 0; i< todo_list.length ; i++){
-    if (todo_list[i] === item){
-      todo_list.splice(i,1)
-    }
+  removeTodo(id) {
+    this.setState({
+        todos: this.state.todos.filter((todo, index) => todo.id !== id)
+      });
   }
-  this.setState({
-    todo_list
-  })
-}
-
 
   render() {
     return (
-        <div class="display">
-          <h1> My TO-DO List </h1>
+      <div className="App">
+        <div className="todo-wrapper">
+          <TodoHeader />
+          <TodoInput todoText="" addTodo={this.addTodo} />
+          <ul>
+            {
+              this.state.todos.map((todo) => {
+                return <TodoItem todo={todo} key={todo.id} id={todo.id} removeTodo={this.removeTodo}/>
+              })
+            }
+          </ul>
         </div>
+      </div>
     );
   }
 }
